@@ -1,0 +1,289 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>7 Seconds to Do! — Alpha v0.0.4_5</title><style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#fff;font-family:system-ui,Arial,sans-serif;color:#111}
+#shell{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;overflow:hidden}
+canvas{display:block;background:#fff;image-rendering:pixelated;image-rendering:crisp-edges;flex:none;outline:none}
+#hud{position:fixed;top:10px;left:10px;right:10px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;pointer-events:none;z-index:2}
+#help{font-size:12px;background:rgba(255,255,255,.92);padding:8px 10px;border:1px solid #ddd;border-radius:6px;max-width:65ch}
+#actions{display:flex;gap:7px;pointer-events:auto}button{background:#fff;border:1px solid #555;border-radius:6px;padding:8px 11px;font-weight:600;cursor:pointer;white-space:nowrap}button:hover{background:#eee}
+#menu{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;background:#fff;padding:20px}
+#menu[hidden]{display:none}
+.panel{width:min(460px,100%);text-align:center}
+.logo{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-weight:1000;font-size:clamp(34px,6vw,64px);line-height:.98;letter-spacing:-.08em;color:#111;margin:0 0 14px;text-shadow:4px 4px 0 #ffd400}
+.logo .seven{color:#e53935}.logo .do{color:#20b455}
+.subtitle{font:700 12px ui-monospace,monospace;letter-spacing:.18em;margin:0 0 30px;color:#666}
+.menuButtons{display:grid;gap:12px;max-width:270px;margin:0 auto}
+.menuButtons button{font:800 17px ui-monospace,monospace;border:3px solid #111;border-radius:0;padding:14px;background:#fff;box-shadow:5px 5px 0 #ffd400}
+.menuButtons button:hover,.menuButtons button:focus-visible{background:#ffd400;outline:none;transform:translate(2px,2px);box-shadow:3px 3px 0 #111}
+.menuButtons button.primary{background:#ffd400}
+.panel p{line-height:1.65}.infoPanel{max-height:min(84vh,720px);overflow-y:auto;padding:8px 16px 16px;scrollbar-width:thin}.infoPanel p{margin:8px 0}.infoPanel h3{font:900 15px ui-monospace,monospace;margin:18px 0 5px}.infoPanel ul{text-align:left;font-size:13px;line-height:1.55;padding-left:22px}.infoPanel .menuButtons{margin-top:18px}.tagline{font-weight:700;font-size:14px} .metaLine{font-size:13px;color:#555}.panel h2{font:900 26px ui-monospace,monospace}
+.settings{text-align:left;max-width:290px;margin:20px auto}.settings label{display:block;margin:15px 0;font-size:15px}
+.settings input{accent-color:#111}.muted{color:#555;font-size:13px}
+#phaseHud{position:fixed;top:58px;left:10px;z-index:3;background:#fff;border:2px solid #111;padding:7px 10px;font:800 12px ui-monospace,monospace;pointer-events:none}
+#phaseHud[hidden]{display:none}
+#phaseHud.danger{color:#d72626;border-color:#d72626;background:#fff0f0;font-size:17px;box-shadow:0 0 0 2px rgba(220,30,30,.08)}
+#phaseHud.critical{font-size:21px;font-weight:1000}
+#overlay{position:fixed;inset:0;z-index:8;background:rgba(255,255,255,.96);display:grid;place-items:center;padding:20px}
+#overlay[hidden]{display:none}
+#overlay .panel{background:#fff}
+#overlayTitle{font:900 clamp(28px,6vw,42px) ui-monospace,monospace}
+#overlayText{font-size:16px;line-height:1.7;max-width:36ch;margin:16px auto 25px}
+#status{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);font-size:12px;background:rgba(255,255,255,.92);border:1px solid #ddd;padding:5px 9px;border-radius:6px;white-space:nowrap;pointer-events:none}
+@media(max-width:640px){#help{font-size:10px;max-width:50vw}button{font-size:11px;padding:7px}#status{font-size:10px}}
+</style></head><body><div id="shell"><canvas id="game" width="640" height="320" aria-label="Jogo de plataforma minimalista"></canvas></div>
+<div id="hud"><div id="help">A/D ou ←/→: mover · W, ↑ ou Espaço: pular · 2 fases · apresentação e desafio · R: reiniciar · ESC: menu</div><div id="actions"><button id="reset">Reiniciar</button><button id="fullscreen">⛶ Tela cheia</button></div></div>
+<div id="menu" role="dialog" aria-modal="true" aria-label="Menu do jogo">
+  <section class="panel" id="mainPanel">
+    <h1 class="logo"><span class="seven">7</span> Seconds<br>to <span class="do">Do!</span></h1>
+    <p class="subtitle">ALPHA v0.0.4_5 · A GAME BY HADRYN</p>
+    <div class="menuButtons"><button class="primary" id="start">▶ Iniciar</button><button id="openSettings">⚙ Configurações</button><button id="openCredits">★ Créditos</button><button id="openChangelog">≡ Changelog</button></div>
+  </section>
+  <section class="panel" id="settingsPanel" hidden>
+    <h2>Configurações</h2>
+    <div class="settings"><label><input type="checkbox" id="showHelp" checked> Mostrar instruções</label>
+    <label><input type="checkbox" id="showStatus" checked> Mostrar informações de escala</label>
+    <label><input type="checkbox" id="pixelScale" checked> Usar escala inteira quando possível</label></div>
+    <div class="menuButtons"><button id="settingsFullscreen">⛶ Alternar tela cheia</button><button class="back">← Voltar</button></div>
+  </section>
+  <section class="panel infoPanel" id="creditsPanel" hidden>
+    <h2>Créditos</h2>
+    <p><strong>7 Seconds to Do!</strong></p>
+    <p class="tagline">Memorize o caminho. Você tem 7 segundos!</p>
+    <p><strong>Criação, conceito e direção:</strong> Hadryn<br><strong>Desenvolvimento do protótipo:</strong> Hadryn com assistência do ChatGPT.</p>
+    <h3>Sobre o jogo</h3>
+    <p>Plataforma minimalista de memorização, precisão e corrida contra o tempo. Estude o percurso na Apresentação; no Desafio, encontre a chave e alcance a porta em 7 segundos. Tentativas ilimitadas.</p>
+    <h3>O projeto</h3>
+    <p class="metaLine">Primeiro jogo independente de Hadryn · Alpha v0.0.4_5</p>
+    <p class="metaLine">GDD: 30 fases planejadas em 6 mundos (5 fases por mundo), com desafios progressivos. Futuramente: recordes, medalhas, ranking e novos obstáculos.</p>
+    <p class="metaLine">Lançamento planejado gratuito, sem anúncios. Idiomas previstos: Português (BR), inglês e espanhol. Plataformas planejadas: Web, Windows, Android e consoles.</p>
+    <p class="muted">Nesta Alpha: 2 fases jogáveis (Zigue-Zagueando e Parkour). Recursos previstos no GDD ainda não estão disponíveis.</p>
+    <div class="menuButtons"><button class="back">← Voltar</button></div>
+  </section>
+  <section class="panel infoPanel" id="changelogPanel" hidden>
+    <h2>Changelog</h2>
+    <p><strong>Alpha v0.0.4_5</strong> · Refinamento da jogabilidade</p>
+    <ul>
+      <li>Movimento horizontal imediato e controle total da direção no ar.</li>
+      <li>Velocidades preservadas: 175 px/s normal, 230 px/s após a chave.</li>
+      <li>Salto fixo de aproximadamente 6 blocos (96 px).</li>
+      <li><em>Coyote time</em> de 0,10 s e <em>jump buffer</em> de 0,10 s.</li>
+      <li>Colisões sólidas em todas as faces das plataformas, com resolução separada por eixos.</li>
+      <li>Porta verde reconhece contato por qualquer lado, inclusive nas bordas.</li>
+      <li>Cronômetro de 7 segundos medido com relógio monotônico, sem tolerância extra.</li>
+      <li>Expiração mantém a posição do personagem, fecha a porta e devolve a chave.</li>
+      <li>Créditos atualizados com Hadryn e informações do GDD.</li>
+      <li>Fases 1 e 2 preservadas.</li>
+    </ul>
+    <p class="muted">Alpha v0.0.4_4 — base anterior, antes do refinamento de física.</p>
+    <div class="menuButtons"><button class="back">← Voltar</button></div>
+  </section>
+</div>
+<div id="phaseHud" hidden></div>
+<div id="overlay" hidden><section class="panel"><h2 id="overlayTitle"></h2><p id="overlayText"></p><div class="menuButtons"><button class="primary" id="overlayNext">Continuar →</button></div></section></div>
+<div id="status">Escala ajustada à tela · Blocos lógicos de 16×16</div>
+<script>
+'use strict';
+const c=document.querySelector('#game'),ctx=c.getContext('2d');ctx.imageSmoothingEnabled=false;
+const TILE=16,W=640,H=320;
+const menu=document.querySelector('#menu');
+let scene='menu',integerScale=true;
+function showPanel(id){
+ for(const el of menu.querySelectorAll('.panel'))el.hidden=el.id!==id;
+}
+function openMenu(){scene='menu';keys.clear();menu.hidden=false;overlay.hidden=true;phaseHud.hidden=true;showPanel('mainPanel');}
+function showOverlay(title,message,action,label='Continuar →'){
+ scene='overlay';keys.clear();overlayTitle.textContent=title;overlayText.textContent=message;
+ overlayNext.textContent=label;overlayNext.onclick=action;overlay.hidden=false;
+}
+function beginPresentation(){
+ phase='presentation';reset();phaseHud.hidden=false;
+ overlay.hidden=true;scene='playing';last=performance.now();
+}
+function beginChallenge(){
+ phase='challenge';reset();phaseHud.hidden=false;
+ overlay.hidden=true;scene='playing';last=performance.now();
+}
+function startGame(){currentStage=0;menu.hidden=true;beginPresentation();}
+document.querySelector('#start').onclick=startGame;
+document.querySelector('#openSettings').onclick=()=>showPanel('settingsPanel');
+document.querySelector('#openCredits').onclick=()=>showPanel('creditsPanel');
+document.querySelector('#openChangelog').onclick=()=>showPanel('changelogPanel');
+document.querySelectorAll('.back').forEach(b=>b.onclick=()=>showPanel('mainPanel'));
+document.querySelector('#showHelp').onchange=e=>document.querySelector('#help').hidden=!e.target.checked;
+document.querySelector('#showStatus').onchange=e=>document.querySelector('#status').hidden=!e.target.checked;
+document.querySelector('#pixelScale').onchange=e=>{integerScale=e.target.checked;resizeGame();};
+
+// O canvas sempre desenha em 640×320; apenas seu tamanho visual muda.
+// Preferimos escala inteira para manter pixels nítidos. Em telas menores que
+// 640×320, reduzimos proporcionalmente para que tudo continue visível.
+function resizeGame(){
+  const sw=window.innerWidth,sh=window.innerHeight;
+  const fit=Math.min(sw/W,sh/H);
+  const scale=integerScale&&fit>=1?Math.max(1,Math.floor(fit)):fit;
+  c.style.width=(W*scale)+'px';c.style.height=(H*scale)+'px';
+  document.querySelector('#status').textContent=
+    'Tela '+sw+'×'+sh+' · Jogo 640×320 · Escala '+(Number.isInteger(scale)?scale+'×':scale.toFixed(2)+'×');
+}
+addEventListener('resize',resizeGame);
+document.addEventListener('fullscreenchange',resizeGame);
+resizeGame();
+const fullBtn=document.querySelector('#fullscreen');
+async function toggleFullscreen(){
+  try{if(document.fullscreenElement)await document.exitFullscreen();
+      else await document.documentElement.requestFullscreen();}
+  catch(err){alert('O navegador não permitiu tela cheia. Você pode usar F11 no computador.');}
+}
+fullBtn.addEventListener('click',toggleFullscreen);
+document.querySelector('#settingsFullscreen').addEventListener('click',toggleFullscreen);
+document.addEventListener('fullscreenchange',()=>{
+ fullBtn.textContent=document.fullscreenElement?'⛶ Sair da tela cheia':'⛶ Tela cheia';
+});
+
+const stages=[{"name":"Zigue-Zagueando","presentation":{"ground":["1111111111111111111111111111111111111111","1000000000000000000000000000000000000001","1000000000000000000000000000000000000001","1111111111111111111111111111111111110001","1111111111111111111111111111111111110001","1000000000000000000000000000000000000001","1000000000000000000000000000000000000001","1000000000000000000000000000000000000001","1000111111111111111111111111111111111111","1000111111111111111111111111111111111111","1000000000000000000000000000000000000001","1000000000000000000000000000000000000001","1000000000000000000000000000000000000001","1111111111111111111111111111111111110001","1111111111111111111111111111111111110001","1000000000000000000000000000000000000001","1000000000000000000000000000000000000001","1000000000000000000000000000000000000001","1111111111111111111111111111111111111111","1111111111111111111111111111111111111111"],"player":{"x":1,"y":17},"door":{"x":1,"y":1},"key":{"x":1,"y":10}},"challenge":{"ground":["1111111111111111111111111111111111111111","1000000000000000000000000000000000000001","1000000000000000000000000000000000000001","1111111111111111111111111111111111110001","1111111111111111111111111111111111110001","1000000000000000000000000000000000000001","1000000000000000000000000000000000000001","1000000000000000000000000000000000000001","1000111111111111111111111111111111111111","1000111111111111111111111111111111111111","1000000000000000000000000000000000000001","1000000000000000000000000000000000000001","1000000000000000000000000000000000000001","1111111111111111111111111111111111110001","1111111111111111111111111111111111110001","1000000000000000000000000000000000000001","1000000000000000000000000000000000000001","1000000000000000000000000000000000000001","1111111111111111111111111111111111111111","1111111111111111111111111111111111111111"],"player":{"x":1,"y":17},"door":{"x":1,"y":1},"key":{"x":1,"y":12}}},{"name":"Parkour","presentation":{"ground":["1111111111111111111111111111111111111111","1000000000000000000000000000000000000001","1000000000000000000000000000000000000001","1000000000000000000000000000000000001111","1000111000000000000000000000000000001111","1000111000000000111000000000111100001111","1001000000000000111000000000111100001111","1001000000000000111000000000111100001111","1001000000000000111000000000111100001111","1110000000111000111000111000111100001111","1110000000111000111000111000111100001111","1000000000000000000000000000000000001111","1000000000000000000000000000000000001111","1000000000000000000000000000000000001111","1111111000000000000000000000000000001111","1111111000000000000000000000000000001111","1000000000000000000000000000000000001111","1000000000000000000000000000000000001111","1000000000000000000000000000000000001111","1111111111111111111111111111111111111111"],"player":{"x":1,"y":18},"door":{"x":38,"y":1},"key":null},"challenge":{"ground":["1111111111111111111111111111111111111111","1000000000000000000000000000000000000001","1000000000000000000000000000000000000001","1000000000000000000000000000000000001111","1000111000000000000000000000000000001111","1000111000000000111000000000111100001111","1001000000000000111000000000111100001111","1001000000000000111000000000111100001111","1001000000000000111000000000111100001111","1110000000111000111000111000111100001111","1110000000111000111000111000111100001111","1000000000000000000000000000000000001111","1000000000000000000000000000000000001111","1000000000000000000000000000000000001111","1111111000000000000000000000000000001111","1111111000000000000000000000000000001111","1000000000000000000000000000000000001111","1000000000000000000000000000000000001111","1000000000000000000000000000000000001111","1111111111111111111111111111111111111111"],"player":{"x":1,"y":18},"door":{"x":38,"y":1},"key":{"x":1,"y":8}}}];
+let currentStage=0;
+let floors=[],door={x:0,y:0,w:16,h:32},redKey={x:0,y:0,w:16,h:16};
+function currentStageData(){return stages[currentStage];}
+function loadStage(){
+  const info=currentStageData()[phase];
+  floors=[];
+  for(let y=0;y<20;y++){
+    const row=info.ground[y];
+    for(let x=0;x<40;){
+      if(row[x]!=='1'){x++;continue;}
+      const start=x;
+      while(x<40&&row[x]==='1')x++;
+      floors.push({x:start*16,y:y*16,w:(x-start)*16,h:16});
+    }
+  }
+  door={x:info.door.x*16,y:info.door.y*16,w:16,h:32};
+  redKey=info.key?{x:info.key.x*16,y:info.key.y*16,w:16,h:16}:null;
+}
+
+const player={x:32,y:272,w:16,h:16,vx:0,vy:0,ground:false};
+const keys=new Set();let doorOpen=false,won=false,last=0;
+let phase='presentation',timer=7,timerRunning=false,deadline=0;
+const COYOTE_TIME=0.10, JUMP_BUFFER=0.10;
+let coyoteLeft=0,jumpBufferLeft=0;
+let visualClock=0,trailClock=0;
+const speedNormal=175, speedTurbo=230;
+const speedTrail=[];
+const phaseHud=document.querySelector('#phaseHud');
+const overlay=document.querySelector('#overlay'),overlayTitle=document.querySelector('#overlayTitle'),
+ overlayText=document.querySelector('#overlayText'),overlayNext=document.querySelector('#overlayNext');
+function updatePhaseHud(){
+ phaseHud.classList.toggle('danger',timerRunning && timer<=3);
+ phaseHud.classList.toggle('critical',timerRunning && timer<=1.5);
+ const title='FASE '+(currentStage+1)+' — '+currentStageData().name.toUpperCase();
+ if(phase==='presentation')phaseHud.textContent=title+' · APRESENTAÇÃO';
+ else phaseHud.textContent=timerRunning?'⏱ '+timer.toFixed(1)+' SEGUNDOS':title+' · DESAFIO · PEGUE A CHAVE';
+ if(timerRunning && timer<=3){
+  const progress=1-timer/3;
+  const hz=2+progress*8;
+  phaseHud.style.opacity=Math.sin(visualClock*Math.PI*2*hz)>=-0.1?'1':'0.18';
+ }else phaseHud.style.opacity='1';
+}
+function reset(){
+ loadStage();
+ const spawn=currentStageData()[phase].player;
+ Object.assign(player,{x:spawn.x*16,y:spawn.y*16,vx:0,vy:0,ground:false});
+ coyoteLeft=0;jumpBufferLeft=0;deadline=0;
+ doorOpen=phase==='presentation';won=false;timer=7;timerRunning=false;
+ speedTrail.length=0;trailClock=0;visualClock=0;
+ updatePhaseHud();
+}
+function collide(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y}
+function preciseTouch(a,b){const e=0.001;return a.x<=b.x+b.w+e&&a.x+a.w>=b.x-e&&a.y<=b.y+b.h+e&&a.y+a.h>=b.y-e}
+// Contato exato com qualquer lado da porta, sem ampliar a hitbox em 2 px.
+function touchesDoor(a,b){return preciseTouch(a,b)}
+function expireTimer(){
+ timerRunning=false;doorOpen=false;timer=7;deadline=0;
+ speedTrail.length=0;trailClock=0;updatePhaseHud();
+}
+function tryJump(){
+ if(jumpBufferLeft>0&&(player.ground||coyoteLeft>0)){
+  player.vy=-404;player.ground=false;coyoteLeft=0;jumpBufferLeft=0;
+ }
+}
+function update(dt,now){if(scene!=='playing'||won)return;
+ visualClock+=dt;
+ for(let i=speedTrail.length-1;i>=0;i--){speedTrail[i].life-=dt;if(speedTrail[i].life<=0)speedTrail.splice(i,1);}
+ // Prazo calculado pelo relógio monotônico, não pelo tempo do quadro.
+ if(timerRunning){
+  timer=Math.max(0,(deadline-now)/1000);
+  if(now>=deadline)expireTimer();
+  else updatePhaseHud();
+ }
+ jumpBufferLeft=Math.max(0,jumpBufferLeft-dt);
+ if(player.ground)coyoteLeft=COYOTE_TIME;
+ else coyoteLeft=Math.max(0,coyoteLeft-dt);
+ tryJump();
+ const dir=(keys.has('ArrowRight')||keys.has('KeyD')?1:0)-(keys.has('ArrowLeft')||keys.has('KeyA')?1:0);
+ player.vx=dir*(timerRunning?speedTurbo:speedNormal);
+ if(timerRunning&&dir!==0){
+  trailClock+=dt;
+  while(trailClock>=0.035){trailClock-=0.035;speedTrail.push({x:player.x-dir*7,y:player.y+3,dir,life:0.22});}
+ }else trailClock=0;
+ // Eixo X: barrar contatos laterais sem alterar movimento vertical.
+ player.x+=player.vx*dt;
+ for(const f of floors){if(collide(player,f)){
+  if(player.vx>0)player.x=f.x-player.w;
+  else if(player.vx<0)player.x=f.x+f.w;
+ }}
+ player.x=Math.max(0,Math.min(W-player.w,player.x));
+ // Eixo Y: chão e tetos são sólidos, com velocidade zerada no choque.
+ player.vy=Math.min(550,player.vy+850*dt);
+ player.y+=player.vy*dt;player.ground=false;
+ for(const f of floors){if(collide(player,f)){
+  if(player.vy>=0){player.y=f.y-player.h;player.ground=true;}
+  else{player.y=f.y+f.h;}
+  player.vy=0;
+ }}
+ if(player.ground){coyoteLeft=COYOTE_TIME;tryJump();}
+ // A chave só inicia um novo prazo quando o desafio está desarmado.
+ if(phase==='challenge'&&!doorOpen&&redKey&&collide(player,redKey)){
+  doorOpen=true;timer=7;timerRunning=true;deadline=performance.now()+7000;
+  visualClock=0;trailClock=0;updatePhaseHud();
+ }
+ if(player.y>H+30){reset();return;}
+ // Mesmo se houver uma queda brusca de FPS, não conceder tempo extra.
+ const checkNow=performance.now();
+ if(timerRunning){timer=Math.max(0,(deadline-checkNow)/1000);if(checkNow>deadline)expireTimer();}
+ if(doorOpen&&touchesDoor(player,door)){
+  // Contatos após o prazo não contam, nem por um quadro.
+  if(phase==='challenge'&&(!timerRunning||performance.now()>deadline)){
+   if(timerRunning)expireTimer();return;
+  }
+  won=true;timerRunning=false;
+  if(phase==='presentation')beginChallenge();
+  else if(currentStage<stages.length-1){currentStage++;beginPresentation();}
+  else showOverlay('TODAS AS FASES CONCLUÍDAS!','Você venceu a Fase 1 e a Fase 2. Parabéns!',openMenu,'Voltar ao menu →');
+ }
+}
+
+function draw(){ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.fillStyle='#ffd400';for(const f of floors)ctx.fillRect(f.x,f.y,f.w,f.h);if(phase==='challenge'&&!doorOpen&&redKey){
+  // Chave vermelha de 16×16: argola, haste e dentes.
+  const x=redKey.x,y=redKey.y;
+  ctx.fillStyle='#e53935';
+  ctx.fillRect(x+2,y+2,8,8);
+  ctx.fillStyle='#fff';ctx.fillRect(x+4,y+4,4,4);
+  ctx.fillStyle='#e53935';
+  ctx.fillRect(x+8,y+7,3,7);
+  ctx.fillRect(x+10,y+11,4,3);
+}
+ctx.fillStyle=doorOpen?'#20b455':'#e53935';ctx.fillRect(door.x,door.y,door.w,door.h);
+// Rastro pixelado amarelo/cinza dá sensação de corrida, sem alterar a hitbox.
+for(const t of speedTrail){
+ ctx.globalAlpha=Math.max(0,Math.min(.55,t.life*2.5));
+ ctx.fillStyle='#929292';ctx.fillRect(Math.round(t.x),Math.round(t.y),12,10);
+ ctx.fillStyle='#ffd400';ctx.fillRect(Math.round(t.x-t.dir*5),Math.round(t.y+4),5,4);
+}
+ctx.globalAlpha=1;
+ctx.fillStyle='#000';ctx.fillRect(Math.round(player.x),Math.round(player.y),16,16);
+if(timerRunning && Math.abs(player.vx)>0){
+ const px=Math.round(player.x),py=Math.round(player.y),d=Math.sign(player.vx);
+ ctx.fillStyle='#333';ctx.fillRect(px-d*5,py+3,4,2);ctx.fillRect(px-d*9,py+9,6,2);
+}
+}
+function loop(t){let dt=Math.min((t-last)/1000||0,0.033);last=t;while(dt>0){const step=Math.min(dt,1/120);update(step,performance.now());dt-=step}draw();requestAnimationFrame(loop)}
+function jump(){if(scene==='playing'&&!won){jumpBufferLeft=JUMP_BUFFER;tryJump();}}
+addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp','Space'].includes(e.code))e.preventDefault();keys.add(e.code);if(['Space','ArrowUp','KeyW'].includes(e.code)&&!e.repeat)jump();if(e.code==='Escape'){if(scene==='playing'||scene==='overlay')openMenu();else if(!menu.hidden)showPanel('mainPanel')}if(e.code==='KeyR'&&scene==='playing')reset()});addEventListener('keyup',e=>keys.delete(e.code));addEventListener('blur',()=>keys.clear());document.querySelector('#reset').onclick=()=>{if(scene==='playing')reset()};requestAnimationFrame(loop);
+</script></body></html>
