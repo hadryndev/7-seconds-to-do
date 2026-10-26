@@ -2,118 +2,127 @@
 
 # 7 Seconds to Do!
 
-**Memorize o caminho. Você tem 7 segundos!**
+**Memorize the path. You have 7 seconds!**
 
-**Um jogo independente desenvolvido por Hadryn**
+**An independent game developed by Hadryn**
 
-![Banner conceitual de 7 Seconds to Do!](assets/banner.png)
+![7 Seconds to Do! concept banner](assets/banner.png)
 
 ![Status](https://img.shields.io/badge/status-Alpha-orange)
-![Versão](https://img.shields.io/badge/vers%C3%A3o-v0.0.4__5-yellow)
-![Plataforma atual](https://img.shields.io/badge/plataforma-Web%20%2F%20HTML5-blue)
-![Preço planejado](https://img.shields.io/badge/distribui%C3%A7%C3%A3o-gratuita-brightgreen)
+![Version](https://img.shields.io/badge/version-v0.0.4__6-yellow)
+![Current platform](https://img.shields.io/badge/platform-Web%20%2F%20HTML5-blue)
+![Planned pricing](https://img.shields.io/badge/distribution-free-brightgreen)
+
+[**Play on GitHub Pages**](https://hadryndev.github.io/7-seconds-to-do/)
 
 </div>
 
-## 🎮 Sobre o jogo
+## 🎮 About the Game
 
-**7 Seconds to Do!** é um jogo independente de plataforma que combina **memorização, raciocínio rápido, precisão e desafios contra o tempo**.
+**7 Seconds to Do!** is an independent platform game that combines **memorization, quick thinking, precision, and time-based challenges**.
 
-Em cada fase, você primeiro conhece o cenário e memoriza os obstáculos. Depois, no desafio, precisa encontrar a **chave vermelha**: ao coletá-la, você tem **exatamente sete segundos** para chegar à porta!
+In each level, first explore the environment and memorize the obstacles. During the challenge, find the **red key**: once collected, you have **exactly seven seconds** to reach the door!
 
-Errou? Tente novamente. As tentativas são ilimitadas e cada tentativa é uma oportunidade de aprender o caminho.
+Missed it? Try again. Attempts are unlimited, and each attempt is a chance to learn the route.
 
-## 🕹️ Como jogar
+## 🕹️ How to Play
 
-Cada fase tem duas etapas obrigatórias:
+Each level has two mandatory stages:
 
-1. **Apresentação:** explore e memorize o percurso, sem cronômetro.
-2. **Desafio:** encontre a chave vermelha para iniciar a contagem de sete segundos e alcance a porta verde.
+1. **Presentation:** explore and memorize the route without a timer.
+2. **Challenge:** find the red key to start the seven-second countdown and reach the green door.
 
-Se o tempo acabar, a porta fecha, a chave reaparece e o personagem permanece onde estava.
+If time runs out, the door closes, the key respawns at its original location, and the character stays in place.
 
-### Controles
+### Controls
 
-| Ação | Teclas |
+| Action | Keys |
 |---|---|
-| Mover | `A` / `D` ou `←` / `→` |
-| Pular | `W`, `↑` ou `Espaço` |
-| Reiniciar etapa | `R` |
-| Voltar ao menu | `Esc` |
+| Move | A / D or ← / → |
+| Jump | W, ↑, or Space |
+| Restart stage | R |
+| Return to menu | Esc |
 
-## 🚀 Versão atual
+## 🚀 Current Version
 
-**Alpha v0.0.4_5 — compilação aprovada**
+**Alpha v0.0.4_6 — approved and published build**
 
-A versão disponível atualmente inclui:
+The current version includes:
 
-- **Duas fases jogáveis:** *Zigue-Zagueando* e *Parkour*;
-- Etapas de **Apresentação** e **Desafio** em ambas;
-- Cronômetro rigoroso de **7 segundos** após coletar a chave;
-- Tentativas ilimitadas;
-- Movimento responsivo e controle aéreo completo;
-- Salto fixo de aproximadamente seis blocos;
-- **Coyote time** e **jump buffer**, que melhoram a resposta dos saltos nas bordas;
-- Plataformas sólidas, colisões refinadas e reconhecimento de contato com a porta;
-- Menu com configurações, créditos e changelog.
+- **Two original levels:** *Zigue-Zagueando* and *Parkour*;
+- **One experimental level:** *Camera Laboratory*, 120 tiles wide;
+- Presentation and Challenge stages for all three levels;
+- A strict **7-second** timer after collecting the key;
+- Unlimited attempts;
+- Responsive movement and full mid-air control;
+- A fixed jump height of approximately six tiles;
+- **Coyote time** and **jump buffering**, improving jumps near platform edges;
+- Solid platforms, refined collisions, and precise door contact;
+- A **dynamic horizontal camera** with directional look-ahead and smoothed changes of direction;
+- Support for **variable-width levels**, keeping the height at 20 tiles;
+- A menu with settings, credits, and an in-game changelog.
 
-### Executar localmente
+### Run Locally
 
-1. Baixe o arquivo `index.html` deste repositório.
-2. Abra-o em um navegador moderno.
-3. Clique em **Iniciar**.
+1. Download the repository's **index.html** file.
+2. Open it in a modern browser.
+3. Click **Start** (currently displayed as **Iniciar** in the game).
 
-Não é necessário instalar programas adicionais.
+No additional software is required.
 
-> **GitHub Pages:** a publicação online ainda não foi confirmada. Quando estiver disponível, o link do jogo será adicionado aqui.
+**GitHub Pages:** https://hadryndev.github.io/7-seconds-to-do/
 
-## 🗺️ Visão para a versão completa
+> The current in-game interface is in Brazilian Portuguese. Repository documentation is maintained in English. Further game languages are planned.
 
-O **Game Design Document (GDD)** prevê, para a versão final:
+## 🗺️ Vision for the Full Game
 
-- **30 fases em 6 mundos**, com 5 fases em cada mundo;
-- Mundos temáticos, incluindo propostas de **fogo, gelo e ventania**;
-- Novas mecânicas, como plataformas móveis, armadilhas, teletransportes e dash;
-- Puzzles envolvendo caminhos e chaves escondidas;
-- Personagem geométrico com expressões e pequenas animações;
-- Trilha sonora dinâmica e efeitos retrô / 8-bit;
-- Progresso salvo, recordes pessoais, medalhas ou estrelas e ranking;
-- Idiomas **português (Brasil), inglês e espanhol**;
-- Lançamento **gratuito**, sem anúncios ou compras obrigatórias.
+The [Game Design Document (GDD)](docs/GDD.md) outlines:
 
-**Tudo isso é planejamento:** esses recursos ainda não fazem parte da Alpha atual.
+- **30 levels in 6 worlds**, with 5 levels per world;
+- Themed worlds, including proposed **fire, ice, and wind** environments;
+- Moving and collapsing platforms, traps, teleporters, and dash;
+- Puzzles involving hidden keys and routes;
+- A geometric protagonist with expressions and small animations;
+- Dynamic music and retro / 8-bit sound effects;
+- Progress saving, personal records, medals or stars, and rankings;
+- **Brazilian Portuguese, English, and Spanish**;
+- **Free distribution**, without ads or mandatory purchases.
 
-As plataformas pretendidas são **Web/HTML5, Windows, Android e consoles**, com expansão gradual. A meta de duração da campanha completa é de **30 a 60 minutos**.
+**These are plans:** these features are not yet all available in the current Alpha.
 
-## 🧰 Tecnologias
+Target platforms include **Web/HTML5, Windows, Android, and consoles**, with gradual expansion. The design target for the full campaign is **30–60 minutes**.
+
+## 🧰 Technology
 
 - **HTML5**
 - **CSS**
 - **JavaScript**
 - **Canvas 2D**
 
-O protótipo atual roda diretamente no navegador, sem dependências externas obrigatórias.
+The prototype runs directly in a browser without mandatory external dependencies.
 
-## 📝 Desenvolvimento e histórico
+## 📝 Development and Version History
 
-O projeto segue compilações incrementais, como `Alpha v0.0.4_5`, para registrar melhorias sem mudar necessariamente a versão principal.
+The project uses incremental Alpha build numbers to record changes.
 
-A compilação atual refinou a física, corrigiu problemas de salto próximo às bordas e melhorou a responsividade dos controles.
+- **Alpha v0.0.4_5:** refined physics, collisions, jump reliability, and control responsiveness.
+- **Alpha v0.0.4_6:** dynamic camera and expanded levels.
+- **Alpha v0.0.4_7:** planned; not yet implemented.
 
-Um histórico mais detalhado será mantido no futuro em `CHANGELOG.md`.
+For details, see [CHANGELOG.md](CHANGELOG.md) and [GitHub Releases](https://github.com/hadryndev/7-seconds-to-do/releases).
 
-## 👤 Créditos
+## 👤 Credits
 
-**Criação, conceito e direção:** Hadryn  
-**Desenvolvimento do protótipo:** Hadryn, com assistência do ChatGPT.
+**Creation, concept, and direction:** Hadryn  
+**Prototype development:** Hadryn, with assistance from ChatGPT.
 
-O objetivo é publicar **7 Seconds to Do!** como o primeiro jogo independente de Hadryn e documentar sua evolução como projeto de desenvolvimento e portfólio.
+The goal is to publish **7 Seconds to Do!** as Hadryn's first independent game and document its evolution as a development and portfolio project.
 
 ---
 
 <div align="center">
 
 **7 Seconds to Do!**  
-*Memorize o caminho. Você tem 7 segundos!*
+*Memorize the path. You have 7 seconds!*
 
 </div>
