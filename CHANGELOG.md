@@ -7,6 +7,25 @@ A record of major changes to the game, developed by **Hadryn**.
 >
 > This document records confirmed project changes. Earlier intermediate builds without individual detailed records are grouped together; they were not necessarily public releases.
 
+## Alpha v0.0.4_7 — Moving Platforms Lab 01 (Unreleased)
+
+**Status: experimental laboratory tested and approved; not yet integrated into the published game.**
+
+### Moving Platform Prototype
+- Tested horizontally and vertically moving platforms that carry the player.
+- Preserved the approved **16 × 16 px rectangular collision box** while rendering the character as a more cartoonish rounded square.
+- Kept existing movement and jump physics unchanged.
+
+### Bugs Found and Fixed During Laboratory Testing
+- **Player teleportation on moving-platform underside collisions:** jumping into the underside of the vertical (purple) platform could unexpectedly snap the player to either horizontal edge, particularly while holding a direction or reversing direction mid-jump. **Fix:** separated horizontal side-entry checks from vertical floor/ceiling collision handling to prevent an underside hit from triggering sideways repositioning.
+- **Moving platforms resetting on player death/respawn:** platform motion restarted whenever the player respawned. **Fix:** separated player-only respawn from a full laboratory reset, allowing moving platforms to continue from their current positions and directions.
+
+### Validation
+- The developer retested the previously reported reproduction cases, including jumping into the purple platform from below and changing direction, and reported no remaining glitches.
+- Respawning now leaves the moving platforms running continuously in the laboratory.
+
+> These corrections were verified in the **v0.0.4_7 laboratory prototype**, not in the currently published **Alpha v0.0.4_6**. They will become part of the public changelog when integrated and released.
+
 ## Alpha v0.0.4_6 — Dynamic Camera and Expanded Levels
 
 **Status: approved and deployed.**
