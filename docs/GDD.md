@@ -1,239 +1,255 @@
 # 7 Seconds to Do! — Game Design Document (GDD)
 
-> **Memorize o caminho. Você tem 7 segundos!**  
-> Um jogo independente de **Hadryn**.
+> **Memorize the path. You have 7 seconds!**  
+> An independent game by **Hadryn**.
 
-| Campo | Informação |
+| Field | Details |
 |---|---|
-| Estado do documento | Primeira consolidação do GDD (planejamento) |
-| Versão jogável de referência | **Alpha v0.0.4_5** (aprovada) |
-| Desenvolvedor / identidade pública | **Hadryn** |
-| Gênero proposto | Plataforma com elementos de puzzle, precisão e corrida contra o tempo |
-| Estado do projeto | Alpha em desenvolvimento |
-| Distribuição planejada | Gratuita, sem anúncios ou compras obrigatórias |
-| Narrativa | Sem história; foco exclusivo na jogabilidade |
+| Document status | Initial consolidated GDD; ongoing planning |
+| Reference playable version | **Alpha v0.0.4_6** (approved and deployed) |
+| Developer / public identity | **Hadryn** |
+| Proposed genre | Platformer with puzzle, precision, and time-trial elements |
+| Project status | Alpha development |
+| Planned distribution | Free, without ads or mandatory purchases |
+| Narrative | No story; gameplay-focused |
 
-> **Nota de transparência:** este documento reúne decisões de design e metas futuras. **Planejado não significa implementado.** A versão jogável Alpha v0.0.4_5 não foi alterada pela criação deste documento.
+> **Transparency note:** This document combines confirmed design decisions with future goals. **Planned does not mean implemented.** Updating the GDD does not modify the playable game.
 
-## 1. Visão do jogo
+## 1. Game Overview
 
-**7 Seconds to Do!** é um jogo independente de plataforma que une **memorização, velocidade, aprendizado e variedade de desafios**. O jogador deve primeiro conhecer e memorizar um percurso; depois, ao coletar a chave vermelha, dispõe de **exatamente 7 segundos** para chegar à porta de saída.
+**7 Seconds to Do!** is an independent platform game combining **memorization, speed, learning, and varied challenges**. Players first explore and memorize a route; once they collect the red key, they have **exactly seven seconds** to reach the exit door.
 
-A experiência pretende transmitir **aprendizado e correria**. A intenção é que as falhas sejam um incentivo divertido para tentar novamente, não uma punição excessiva.
+The experience aims to balance **learning and urgency**. Failure should encourage an enjoyable retry instead of excessive punishment.
 
-**Posicionamento:** *fácil de aprender, difícil de dominar*. O projeto é pensado tanto para jogadores casuais quanto para fãs de plataformas, speedrunners e pessoas que gostam de raciocínio e memória.
+**Positioning:** *Easy to learn, hard to master.* The intended audience includes casual players, platformer fans, speedrunners, and players who enjoy memory and reasoning challenges.
 
-**Visão do criador:** tornar este o primeiro jogo independente oficialmente publicado por Hadryn.
+**Creator's vision:** make this the first officially published independent game by Hadryn.
 
-## 2. Loop principal de gameplay
+## 2. Core Gameplay Loop
 
-Todas as fases terão **duas etapas obrigatórias**, nesta ordem:
+Every level has **two mandatory stages**, in this order:
 
-### 2.1 Apresentação
+### 2.1 Presentation
 
-- O jogador conhece o cenário e memoriza o caminho e os obstáculos.
-- Não há cronômetro de sete segundos durante a memorização.
-- A etapa termina ao alcançar a porta correspondente, iniciando o Desafio.
+- Players explore the environment and memorize the route and obstacles.
+- There is no seven-second countdown during memorization.
+- Reaching the corresponding door ends Presentation and begins Challenge.
 
-### 2.2 Desafio
+### 2.2 Challenge
 
-1. O jogador procura a **chave vermelha**.
-2. **A coleta da chave** abre a porta verde, aumenta a velocidade do personagem e inicia imediatamente o cronômetro.
-3. O jogador deve tocar a porta antes do fim do prazo de **7 segundos**, com contato válido por qualquer lado.
-4. Se o tempo acaba, a porta fecha, a chave reaparece em sua posição original e o personagem **permanece onde estava**.
-5. As tentativas são **ilimitadas**, sem penalidade pelo número de erros.
+1. The player searches for the **red key**.
+2. **Collecting the key** opens the green door, increases movement speed, and immediately starts the timer.
+3. The player must touch the door within **7 seconds**; contact from any side counts.
+4. If time expires, the door closes, the key respawns in its original location, and the player **remains in their current position**.
+5. Attempts are **unlimited**, with no penalty for the number of failures.
 
-A contagem regressiva terá sempre sete segundos, em todas as fases. Não estão previstos tempos extras ou redução do limite conforme a dificuldade.
+The countdown is always seven seconds for every level. There are no planned bonus seconds or shorter time limits based on difficulty.
 
-### 2.3 Puzzles futuros
+### 2.3 Future Puzzles
 
-Em fases futuras, a chave poderá estar escondida ou exigir o uso de mecânicas aprendidas anteriormente para ser encontrada ou alcançada. O tempo de sete segundos continua iniciando **somente após a coleta**.
+In future levels, the key may be hidden or require previously learned mechanics to find or reach it. The seven-second countdown still begins **only when the key is collected**.
 
-## 3. Física e controles — base aprovada
+## 3. Physics and Controls — Approved Foundation
 
-A **Alpha v0.0.4_5** foi aprovada em teste prático pelo desenvolvedor, com destaque para maior responsividade e correção do problema de salto próximo às extremidades das plataformas.
+**Alpha v0.0.4_5** was approved through practical testing, with particular improvements to responsiveness and jump reliability near platform edges. **Alpha v0.0.4_6** preserves these controls while adding horizontal camera tracking.
 
-| Regra | Especificação consolidada |
+| Rule | Agreed specification |
 |---|---|
-| Personagem | Quadrado, 16 × 16 px na base atual |
-| Movimento horizontal | Resposta imediata ao comando, sem aceleração ou inércia horizontal |
-| Velocidade normal | **175 px/s** |
-| Velocidade após pegar a chave | **230 px/s** enquanto o cronômetro estiver ativo |
-| Salto | Altura fixa de cerca de **6 blocos / 96 px** em espaço livre |
-| Controle no ar | Total, inclusive reversão imediata de direção |
-| Coyote time | Habilitado; valor inicial de referência **0,10 s** |
-| Jump buffer | Habilitado; valor inicial de referência **0,10 s** |
-| Plataformas | Completamente sólidas nos quatro lados |
-| Porta verde | A etapa conclui ao encostar por qualquer lado, inclusive na borda |
-| Cronômetro | **7 segundos rigorosos**, sem tolerância extra de conclusão |
-| Falha por tempo | Reposiciona somente a chave, fecha a porta e restaura a velocidade normal |
+| Player | Square, currently **16 × 16 px** |
+| Horizontal movement | Immediate response, without horizontal acceleration or inertia |
+| Normal speed | **175 px/s** |
+| Speed after key collection | **230 px/s**, while the timer is active |
+| Jump | Fixed height of approximately **6 tiles / 96 px** in open space |
+| Air control | Full control, including immediate direction reversal |
+| Coyote time | Enabled; reference value **0.10 s** |
+| Jump buffer | Enabled; reference value **0.10 s** |
+| Platforms | Fully solid on all four sides |
+| Green door | Stage completes upon contact from any side, including an edge |
+| Timer | Strict **7 seconds**, with no extra completion grace period |
+| Timeout | Respawns only the key, closes the door, and returns movement to normal speed |
 
-Os tempos de coyote time e jump buffer são parâmetros de referência para ajustes técnicos; a decisão consolidada é que ambos permaneçam presentes.
+The coyote-time and jump-buffer durations are reference parameters that may receive technical tuning; their continued presence is an approved design decision.
 
-## 4. Estrutura de campanha
+### 3.1 Camera and Level Dimensions — Implemented in Alpha v0.0.4_6
 
-| Meta para a versão final | Quantidade |
+- The gameplay viewport remains **640 × 320 px**, using **16 × 16 px tiles**.
+- Level height remains fixed at **20 tiles**.
+- Level width may exceed the viewport and varies by level.
+- The camera scrolls **horizontally only**, staying within level boundaries.
+- Directional framing targets approximately **35% of screen width** while moving right and **65%** while moving left.
+- Direction changes use a smoothed camera transition, accepted for this Alpha despite minor remaining visual discomfort during reversals.
+- A **120-tile-wide Camera Laboratory** level was added to validate long-level behavior.
+
+## 4. Campaign Structure
+
+| Final-game goal | Quantity |
 |---|---:|
-| Mundos | **6** |
-| Fases por mundo | **5** |
-| Total de fases | **30** |
-| Etapas por fase | **2**: Apresentação + Desafio |
-| Total de etapas jogáveis previstas | **60** |
-| Duração pretendida da primeira conclusão | **30 minutos a 1 hora** |
+| Worlds | **6** |
+| Levels per world | **5** |
+| Total levels | **30** |
+| Stages per level | **2**: Presentation + Challenge |
+| Planned playable stages | **60** |
+| Target first-completion time | **30 minutes to 1 hour** |
 
-A campanha será sequencial e apresentará dificuldade progressiva. Cada mecânica deve ser introduzida, praticada e depois combinada com outras. A duração é **meta de design**, não resultado de testes com o jogo completo.
+The campaign is intended to be sequential, with progressive difficulty. Each mechanic should be introduced, practiced, and later combined with others. The duration is a **design target**, not a tested result for a complete game.
 
-### 4.1 Mundos
+### 4.1 Worlds
 
-Os mundos serão temáticos e terão cinco fases cada. Ideias mencionadas até agora:
+Each world will have five levels. Concepts discussed so far:
 
-- **Mundo inicial / fundamentos:** corrida, salto e memorização do percurso; inclui as duas fases atuais.
-- **Fogo:** temática e obstáculos associados ao fogo.
-- **Gelo:** temática e obstáculos associados ao gelo.
-- **Ventania:** temática e obstáculos associados ao vento.
-- **Dois outros mundos:** ainda não definidos.
+- **Starting world / fundamentals:** running, jumping, and route memorization; includes the two original levels.
+- **Fire:** a fire-themed setting and related hazards.
+- **Ice:** an ice-themed setting and related hazards.
+- **Wind:** wind-themed challenges.
+- **Two additional worlds:** not yet defined.
 
-**Atenção:** nomes definitivos, ordem dos mundos e mecânicas específicas por mundo ainda não foram aprovados.
+**Note:** final world names, order, and world-specific mechanics have not been approved.
 
-### 4.2 Fases existentes na Alpha
+### 4.2 Levels in the Current Alpha
 
-| Fase | Nome | Conteúdo |
+| Level | Name | Content |
 |---|---|---|
-| 1 | **Zigue-Zagueando** | Apresentação + Desafio |
-| 2 | **Parkour** | Apresentação + Desafio |
+| 1 | **Zigue-Zagueando** | Presentation + Challenge |
+| 2 | **Parkour** | Presentation + Challenge |
+| 3 (experimental) | **Camera Laboratory** | Presentation + Challenge; 120 tiles wide |
 
-Ainda restam **28 fases planejadas**. Não confundir essa proporção com o percentual de conclusão do desenvolvimento total.
+The intended **30-level campaign** is still in planning. The experimental camera level is not necessarily a final campaign level. The number of current levels should not be treated as a percentage of total development completion.
 
-## 5. Mecânicas futuras planejadas
+## 5. Planned Future Mechanics
 
-As seguintes mecânicas foram selecionadas para **planejamento**, sem autorização de implementação imediata:
+The following mechanics have been selected for **planning**, without implying they have already been implemented:
 
-- Plataformas móveis;
-- Plataformas que desabam;
-- Espinhos e armadilhas;
-- Botões e mecanismos;
-- Teletransportes;
-- Alteração de gravidade;
-- Inimigos ou obstáculos móveis;
-- Dash (avanço rápido);
-- Puzzles com chave escondida e uso das mecânicas aprendidas.
+- Moving platforms, horizontally or vertically;
+- Collapsing platforms;
+- Spikes and traps;
+- Buttons and other mechanisms;
+- Teleporters;
+- Gravity changes;
+- Enemies or moving obstacles;
+- Dash (a fast burst of movement);
+- Hidden-key puzzles requiring previously learned mechanics.
 
-**Princípio de design:** oferecer desafios variados e renovados ao jogador, preservando a mecânica central dos sete segundos.
+### 5.1 Mechanics Discussed for the Next Experimental Update
 
-## 6. Progressão, pontuação e competição — planejamento
+The proposed **Alpha v0.0.4_7** focuses on testing moving platforms and enemies, in small, separately validated gameplay experiments. Design topics discussed include horizontal/vertical movement, carrying the player, patrol behavior, fatal or stompable enemies, and difficulty variations. These remain **planned** until implemented, tested, and approved.
 
-O projeto prevê:
+**Design principle:** deliver varied and fresh challenges while preserving the central seven-second mechanic.
 
-- Progressão sequencial com desbloqueio de fases;
-- Salvamento do progresso;
-- Recordes pessoais;
-- Medalhas ou estrelas de desempenho;
-- Ranking entre jogadores.
+## 6. Progression, Scoring, and Competition — Planning
 
-**Ainda a definir:** como os recordes serão calculados, os critérios de medalhas, o funcionamento técnico do ranking e a persistência do progresso. Essas funcionalidades **não devem ser descritas como disponíveis na Alpha atual**.
+The project envisions:
 
-## 7. Direção visual
+- Sequential progression and level unlocking;
+- Saved progress;
+- Personal records;
+- Performance medals or stars;
+- Rankings among players.
 
-A direção artística escolhida é **minimalista**, com possibilidade de elementos **geométricos modernos**. Pixel Art é uma referência de interesse, mas não uma exigência: a prioridade é preservar clareza e estabilidade da jogabilidade.
+**Still to define:** how records are calculated, medal requirements, the technical leaderboard implementation, and progress persistence. These systems **must not be presented as current Alpha features**.
 
-### 7.1 Elementos visuais atuais
+## 7. Visual Direction
 
-- Fundo predominantemente branco;
-- Personagem como quadrado preto;
-- Plataformas amarelas;
-- Chave vermelha;
-- Porta vermelha quando fechada e verde quando aberta.
+The selected direction is **minimalist**, potentially with **modern geometric elements**. Pixel art is an influence rather than a strict requirement; clarity and stable gameplay take priority.
 
-### 7.2 Personagem — planejamento
+### 7.1 Current Visual Elements
 
-O protagonista continuará sendo um **quadrado com personalidade**, ganhando expressões e pequenas animações. Isso **não implica** uma história: foi decidido manter foco exclusivo na jogabilidade.
+- Predominantly white background;
+- Black square player;
+- Yellow platforms;
+- Red key;
+- Red door when closed, green when open.
 
-Os mundos futuros poderão ter identidades visuais distintas, preservando a leitura rápida dos obstáculos e objetos importantes.
+### 7.2 Protagonist — Planning
 
-## 8. Áudio — planejamento
+The protagonist will remain a **square with personality**, gaining facial expressions and small animations in a future visual update. This **does not imply a narrative**: the project intentionally focuses on gameplay.
 
-### 8.1 Música
+Future worlds may have distinct visual identities while keeping obstacles and critical objects immediately recognizable.
 
-Trilha sonora **dinâmica**, com mudança de sensação entre:
+## 8. Audio — Planning
 
-- **Apresentação:** favorece observação e memorização;
-- **Desafio:** reforça urgência, especialmente durante a contagem regressiva.
+### 8.1 Music
 
-O gênero musical definitivo ainda não foi fechado.
+**Dynamic music** is planned to create different moods:
 
-### 8.2 Efeitos sonoros
+- **Presentation:** supports observation and memorization;
+- **Challenge:** reinforces urgency, particularly during the countdown.
 
-Estilo escolhido: **retrô / 8-bit**.
+A final music genre has not been selected.
 
-Sons previstos para movimentação e saltos, coleta da chave, contagem regressiva, abertura/fechamento da porta, conclusão de fase, tempo esgotado, ambientes/obstáculos e expressões do protagonista.
+### 8.2 Sound Effects
 
-Como o jogo permite repetição ilimitada, os efeitos devem ser perceptíveis sem se tornarem cansativos.
+Selected direction: **retro / 8-bit**.
 
-## 9. Público, plataformas e publicação
+Planned sounds include movement and jumps, collecting the key, countdown warnings, door opening/closing, stage completion, timeout, environments/obstacles, and protagonist expressions.
 
-**Públicos desejados:** jogadores casuais, fãs de plataforma, speedrunners, fãs de raciocínio e memória, crianças e adolescentes e público geral. A classificação indicativa oficial ainda não foi determinada.
+Because unlimited retries are central to the experience, sounds should remain noticeable without becoming exhausting.
 
-**Plataformas planejadas:**
+## 9. Audience, Platforms, and Release
 
-1. Navegador (**Web / HTML5**);
+**Target audiences:** casual players, platformer fans, speedrunners, reasoning and memory enthusiasts, children and teenagers, and general audiences. An official age rating has not yet been established.
+
+**Planned platforms:**
+
+1. Browser (**Web / HTML5**);
 2. **Windows**;
 3. **Android**;
-4. **Consoles** (possibilidade futura, sujeita a requisitos e adaptações).
+4. **Consoles** (a future possibility subject to platform requirements and adaptations).
 
-A estratégia definida é **lançamento gradual**; a ordem exata ainda não foi formalizada. A implementação atual é em HTML5/JavaScript, para navegador.
+The strategy is **gradual release**; the exact rollout order beyond web-first has not been finalized. The current implementation uses HTML5/JavaScript in a browser.
 
-**Modelo comercial:** gratuito, sem anúncios e sem compras obrigatórias.
+**Business model:** free, without ads or mandatory purchases.
 
-**Idiomas desde o lançamento pretendido:** português (Brasil), inglês e espanhol.
+**Intended launch languages:** Brazilian Portuguese, English, and Spanish. The current playable interface is in Brazilian Portuguese; GitHub documentation is maintained in English.
 
-**Data de lançamento:** não definida.
+**Release date:** not defined.
 
-## 10. Referências criativas
+## 10. Creative References
 
-As referências declaradas pelo desenvolvedor são **Celeste** e **Geometry Dash**, especialmente quanto a desafios de plataforma, memorização e possibilidades de puzzles. O projeto deve desenvolver uma identidade própria, sem reproduzir conteúdo desses jogos.
+The developer has cited **Celeste** and **Geometry Dash**, particularly for platforming challenges, memorization, and puzzle possibilities. The project should develop its own identity without reproducing those games' content.
 
-## 11. Versão atual versus visão futura
+## 11. Current Alpha vs. Future Vision
 
-| Aspecto | Alpha v0.0.4_5 | Planejado para a versão completa |
+| Aspect | Alpha v0.0.4_6 | Planned full release |
 |---|---|---|
-| Fases | 2 | 30 |
-| Apresentação e Desafio | Presente | Obrigatório em todas as fases |
-| Cronômetro e chave | Presente | Regra central mantida |
-| Física refinada | Presente e aprovada | Mantida e testada continuamente |
-| Mundos temáticos | Não implementados | 6 mundos |
-| Obstáculos e puzzles avançados | Não implementados | Mecânicas e chaves escondidas |
-| Expressões do personagem | Planejadas | Pequenas animações e expressões |
-| Música e efeitos | Planejamento | Trilha dinâmica e efeitos 8-bit |
-| Recordes, medalhas, ranking | Planejamento | Sistemas a especificar |
-| Internacionalização | Planejamento | PT-BR, EN e ES |
-| Distribuição | Protótipo HTML | Gratuita e multiplataforma gradualmente |
+| Levels | 2 original + 1 experimental camera level | 30 campaign levels |
+| Presentation and Challenge | Implemented | Mandatory in every level |
+| Timer and key | Implemented | Core rule retained |
+| Refined physics | Implemented and approved | Retained and continuously tested |
+| Dynamic camera / longer levels | Implemented | Further level-design use |
+| Themed worlds | Not implemented | 6 worlds |
+| Advanced obstacles and puzzles | Not implemented | New mechanics and hidden keys |
+| Character expressions | Planned | Small animations and expressions |
+| Music and sound | Planning | Dynamic music and 8-bit effects |
+| Records, medals, rankings | Planning | Systems to be specified |
+| Internationalization | Planning | PT-BR, EN, and ES |
+| Distribution | Browser prototype / GitHub Pages | Free, with gradual platform expansion |
 
-## 12. Princípios que orientam o desenvolvimento
+## 12. Development Principles
 
-1. **Aprender antes de correr:** a Apresentação é parte fundamental da identidade do jogo.
-2. **Sete segundos são sete segundos:** tempo fixo e rigoroso após a chave.
-3. **Falhar não deve punir excessivamente:** tentativas ilimitadas e reinício rápido do desafio.
-4. **Controles previsíveis:** a precisão depende de resposta imediata e colisões consistentes.
-5. **Dificuldade progressiva:** introduzir mecânicas e combiná-las gradualmente.
-6. **Variedade sem perder a identidade:** cada mundo traz situações diferentes, preservando a proposta central.
-7. **Documentar com transparência:** distinguir funcionalidades existentes, aprovadas para implementação e apenas planejadas.
+1. **Learn before racing:** Presentation is fundamental to the game's identity.
+2. **Seven seconds means seven seconds:** a fixed, strict countdown after collecting the key.
+3. **Failure should not be excessively punishing:** unlimited attempts and a quick challenge reset.
+4. **Predictable controls:** precision depends on immediate response and consistent collisions.
+5. **Progressive difficulty:** introduce mechanics individually, then combine them.
+6. **Variety without losing identity:** each world brings different situations while preserving the core concept.
+7. **Transparent documentation:** distinguish implemented features, approved work, and ideas that remain planned.
 
-## 13. Próximas definições em aberto
+## 13. Outstanding Design Decisions
 
-- Nomes e ordem dos seis mundos;
-- Regras de cada mundo temático;
-- Critérios de recorde e medalhas;
-- Funcionamento do ranking online;
-- Sistema de salvamento;
-- Detalhes das animações e expressões;
-- Composição musical e implementação dos efeitos;
-- Interface de seleção de mundos e fases;
-- Adaptações de controles para mobile e consoles;
-- Cronograma de lançamento e testes com jogadores.
+- Names and order of the six worlds;
+- Specific mechanics for each themed world;
+- Record and medal criteria;
+- Online ranking operation;
+- Save system;
+- Detailed character animations and expressions;
+- Music composition and sound implementation;
+- World and level-selection interfaces;
+- Mobile and console control adaptations;
+- Release schedule and playtesting with players.
 
 ---
 
-**Desenvolvido por Hadryn**  
-**7 Seconds to Do! — Memorize o caminho. Você tem 7 segundos!**
+**Developed by Hadryn**  
+**7 Seconds to Do! — Memorize the path. You have 7 seconds!**
 
-*Documento de planejamento. A publicação deste arquivo não altera a build Alpha v0.0.4_5.*
+*Planning document. Publishing this file does not modify the Alpha v0.0.4_6 playable build.*
