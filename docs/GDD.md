@@ -6,7 +6,7 @@
 | Field | Details |
 |---|---|
 | Document status | Initial consolidated GDD; ongoing planning |
-| Reference playable version | **Alpha v0.0.4_6** (approved and deployed) |
+| Reference playable version | **Alpha v0.0.4_7** (approved integrated build) |
 | Developer / public identity | **Hadryn** |
 | Proposed genre | Platformer with puzzle, precision, and time-trial elements |
 | Project status | Alpha development |
@@ -15,9 +15,9 @@
 
 > **Transparency note:** This document combines confirmed design decisions with future goals. **Planned does not mean implemented.** Updating the GDD does not modify the playable game.
 
-### Current integration candidate
+### Current approved version
 
-**Alpha v0.0.4_7** is prepared on a separate development branch, **not yet released**. Its intended Level 3, **The Gauntlet**, integrates moving platforms, falling Gravity Platforms, and enemy patrols. The two original levels have been renamed **Zigzagging** (previously *Zigue-Zagueando*) and **Parkour**, without changing their maps. Full integration testing is required before deployment.
+**Alpha v0.0.4_7** has passed final integrated gameplay testing. Level 3, **The Gauntlet**, combines moving platforms, falling Gravity Platforms, enemy patrols, and camera tracking. The two original levels are **Zigzagging** (formerly *Zigue-Zagueando*) and **Parkour**, with their maps preserved. The original turbo trail was restored in Level 3, and temporary notifications were removed.
 
 ### Protagonist concept — Keyla
 
@@ -261,4 +261,4 @@ The developer has cited **Celeste** and **Geometry Dash**, particularly for plat
 **Developed by Hadryn**  
 **7 Seconds to Do! — Memorize the path. You have 7 seconds!**
 
-*Planning document. Updating this file and preparing the Alpha v0.0.4_7 branch does not modify the published Alpha v0.0.4_6 build.*
+*Planning document. The integrated Alpha v0.0.4_7 build has been approved; other future features remain planned.*
