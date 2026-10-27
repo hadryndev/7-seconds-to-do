@@ -244,12 +244,11 @@ const gEnemyDefs=[
  {x:1810,y:272,w:16,h:16,min:1733,max:1867,dir:-1,speed:60,type:'red'},
  {x:2160,y:272,w:16,h:16,min:2144,max:2270,dir:1,speed:53,type:'blue'}
 ];
-let gMoving=[],gGravity=[],gEnemies=[],gRide=null,gDeaths=0,gMessage='',gMessageLeft=0;
+let gMoving=[],gGravity=[],gEnemies=[],gRide=null,gDeaths=0;
 const gClamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const gOverlapX=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x;
 function gClone(defs){return defs.map(d=>({...d,oldX:d.x,oldY:d.y,dx:0,dy:0,alive:true}));}
 function gResetGravity(){gGravity=gGravityDefs.map(d=>({...d,oldX:d.x,oldY:d.y,dx:0,dy:0,vy:0,triggered:false}));}
-function gNotice(message){gMessage=message;gMessageLeft=2.4;}
 function gSpawn(){
  Object.assign(player,{x:48,y:272,w:16,h:16,vx:0,vy:0,ground:true});
  gRide=null;coyoteLeft=COYOTE_TIME;jumpBufferLeft=0;
@@ -267,14 +266,13 @@ function resetGauntlet(){
  gMoving=gClone(gMovingDefs);gEnemies=gClone(gEnemyDefs);gResetGravity();
  gDeaths=0;doorOpen=phase==='presentation';won=false;
  timer=7;timerRunning=false;deadline=0;
- gSpawn();gNotice(phase==='presentation'?'Memorize o percurso e alcance a porta.':'Encontre a chave vermelha!');
+ gSpawn();
  updatePhaseHud();
 }
 function respawnGauntlet(){
  // Respawn never resets automatic moving platforms or their current direction.
  gDeaths++;gSpawn();gResetGravity();gEnemies=gClone(gEnemyDefs);
  timer=7;deadline=0;timerRunning=false;doorOpen=phase==='presentation';
- gNotice('Tentativa '+(gDeaths+1)+' — plataformas móveis continuam.');
  updatePhaseHud();
 }
 function gMoveWorld(dt){
@@ -301,7 +299,6 @@ function gMoveWorld(dt){
 function updateGauntlet(dt,now){
  visualClock+=dt;
  gMoveWorld(dt);
- if(gMessageLeft>0)gMessageLeft-=dt;
  if(timerRunning){
   timer=Math.max(0,(deadline-now)/1000);
   if(now>=deadline)expireTimer();else updatePhaseHud();
@@ -316,6 +313,11 @@ function updateGauntlet(dt,now){
  const direction=(keys.has('ArrowRight')||keys.has('KeyD')?1:0)-(keys.has('ArrowLeft')||keys.has('KeyA')?1:0);
  player.vx=direction*(timerRunning?speedTurbo:speedNormal);
  if(direction)cameraFacing=direction;
+ for(let i=speedTrail.length-1;i>=0;i--){speedTrail[i].life-=dt;if(speedTrail[i].life<=0)speedTrail.splice(i,1);}
+ if(timerRunning&&direction!==0){
+  trailClock+=dt;
+  while(trailClock>=0.035){trailClock-=0.035;speedTrail.push({x:player.x-direction*7,y:player.y+3,dir:direction,life:0.22});}
+ }else trailClock=0;
  const previousX=player.x,previousY=player.y;
  player.x+=player.vx*dt;
  // Horizontal side-entry only: hitting a platform from below never snaps sideways.
@@ -339,7 +341,7 @@ function updateGauntlet(dt,now){
   if(above&&player.y+player.h>=b.y-0.001&&relative>=-0.001){
    player.y=b.y-player.h;player.vy=0;player.ground=true;
    if(gMoving.includes(b)||gGravity.includes(b))gRide=b;
-   if(gGravity.includes(b)&&!b.triggered){b.triggered=true;b.vy=0;gNotice('Plataforma ativada! Pule!');}
+   if(gGravity.includes(b)&&!b.triggered){b.triggered=true;b.vy=0;}
   }else if(below&&player.y<=b.y+b.h+0.001&&relative<=0.001){
    player.y=b.y+b.h;if(player.vy<0)player.vy=0;
   }else if(collide(player,b)){
@@ -347,7 +349,7 @@ function updateGauntlet(dt,now){
    if(topDepth<=bottomDepth&&oldBottom<=by+8){
     player.y=b.y-player.h;player.vy=0;player.ground=true;
     if(gMoving.includes(b)||gGravity.includes(b))gRide=b;
-    if(gGravity.includes(b)&&!b.triggered){b.triggered=true;b.vy=0;gNotice('Plataforma ativada! Pule!');}
+    if(gGravity.includes(b)&&!b.triggered){b.triggered=true;b.vy=0;}
    }else{player.y=b.y+b.h;if(player.vy<0)player.vy=0;}
   }
  }
@@ -357,14 +359,13 @@ function updateGauntlet(dt,now){
   if(e.type==='blue'&&player.vy>=0&&oldBottom<=e.y+4){
    e.alive=false;player.y=e.y-player.h;player.vy=-275;
    player.ground=false;coyoteLeft=0;gRide=null;
-   gNotice('Inimigo azul derrotado!');
   }else{respawnGauntlet();return;}
  }
  if(player.y>H+24){respawnGauntlet();return;}
  if(phase==='challenge'&&!doorOpen&&redKey&&collide(player,redKey)){
   doorOpen=true;timer=7;timerRunning=true;
   deadline=performance.now()+7000;
-  gNotice('Chave coletada! 7 segundos!');updatePhaseHud();
+  visualClock=0;trailClock=0;updatePhaseHud();
  }
  const latest=performance.now();
  if(timerRunning){timer=Math.max(0,(deadline-latest)/1000);if(latest>=deadline)expireTimer();}
@@ -398,14 +399,20 @@ function drawGauntlet(){
   ctx.fillStyle='#e53935';ctx.fillRect(x+8,y+7,3,7);ctx.fillRect(x+10,y+11,4,3);
  }
  ctx.fillStyle=doorOpen?'#20b455':'#e53935';ctx.fillRect(door.x,door.y,door.w,door.h);
+ // Original turbo trail effect from Levels 1 and 2.
+ for(const t of speedTrail){
+  ctx.globalAlpha=Math.max(0,Math.min(.55,t.life*2.5));
+  ctx.fillStyle='#929292';ctx.fillRect(Math.round(t.x),Math.round(t.y),12,10);
+  ctx.fillStyle='#ffd400';ctx.fillRect(Math.round(t.x-t.dir*5),Math.round(t.y+4),5,4);
+ }
+ ctx.globalAlpha=1;
  // No visual redesign before v0.1.0: the original square remains unchanged.
  ctx.fillStyle='#000';ctx.fillRect(Math.round(player.x),Math.round(player.y),16,16);
- ctx.restore();
- if(gMessageLeft>0){
-  ctx.fillStyle='rgba(255,255,255,.92)';ctx.fillRect(148,282,344,24);
-  ctx.font='bold 11px ui-monospace,monospace';ctx.textAlign='center';
-  ctx.fillStyle='#222';ctx.fillText(gMessage,320,298);ctx.textAlign='left';
+ if(timerRunning&&Math.abs(player.vx)>0){
+  const px=Math.round(player.x),py=Math.round(player.y),d=Math.sign(player.vx);
+  ctx.fillStyle='#333';ctx.fillRect(px-d*5,py+3,4,2);ctx.fillRect(px-d*9,py+9,6,2);
  }
+ ctx.restore();
 }
 
 function update(dt,now){if(scene!=='playing'||won)return;
