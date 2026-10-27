@@ -9,7 +9,7 @@
 ![7 Seconds to Do! concept banner](assets/banner.png)
 
 ![Status](https://img.shields.io/badge/status-Alpha-orange)
-![Version](https://img.shields.io/badge/version-v0.0.4__6-yellow)
+![Version](https://img.shields.io/badge/version-v0.0.4__7-yellow)
 ![Current platform](https://img.shields.io/badge/platform-Web%20%2F%20HTML5-blue)
 ![Planned pricing](https://img.shields.io/badge/distribution-free-brightgreen)
 
@@ -45,12 +45,12 @@ If time runs out, the door closes, the key respawns at its original location, an
 
 ## 🚀 Current Version
 
-**Alpha v0.0.4_6 — approved and published build**
+**Alpha v0.0.4_7 — approved integrated build**
 
 The current version includes:
 
-- **Two original levels:** *Zigue-Zagueando* and *Parkour*;
-- **One experimental level:** *Camera Laboratory*, 120 tiles wide;
+- **Two original levels:** *Zigzagging* (formerly *Zigue-Zagueando*) and *Parkour*;
+- **A new long third level:** *The Gauntlet*, 150 tiles wide;
 - Presentation and Challenge stages for all three levels;
 - A strict **7-second** timer after collecting the key;
 - Unlimited attempts;
@@ -59,6 +59,9 @@ The current version includes:
 - **Coyote time** and **jump buffering**, improving jumps near platform edges;
 - Solid platforms, refined collisions, and precise door contact;
 - A **dynamic horizontal camera** with directional look-ahead and smoothed changes of direction;
+- **Moving platforms:** horizontal platforms and vertical elevators;
+- **Gravity Platforms** that start falling when stepped on;
+- **Patrol enemies:** blue enemies can be stomped; red enemies are fatal on contact;
 - Support for **variable-width levels**, keeping the height at 20 tiles;
 - A menu with settings, credits, and an in-game changelog.
 
@@ -92,6 +95,10 @@ The [Game Design Document (GDD)](docs/GDD.md) outlines:
 
 Target platforms include **Web/HTML5, Windows, Android, and consoles**, with gradual expansion. The design target for the full campaign is **30–60 minutes**.
 
+## 🔒 Meet Keyla (Planned for Alpha v0.1.0)
+
+**Keyla** is the officially approved name and concept of the future protagonist: a living padlock who collects a key to unlock the exit. Her name stays **Keyla** across Brazilian Portuguese, English, and Spanish. The full character artwork, expressions, animations, and visual redesign are reserved for **Alpha v0.1.0 — The Great Update**. The current game continues to use its original **16 × 16 px black square** player and collision box.
+
 ## 🧰 Technology
 
 - **HTML5**
@@ -107,7 +114,7 @@ The project uses incremental Alpha build numbers to record changes.
 
 - **Alpha v0.0.4_5:** refined physics, collisions, jump reliability, and control responsiveness.
 - **Alpha v0.0.4_6:** dynamic camera and expanded levels.
-- **Alpha v0.0.4_7:** planned; not yet implemented.
+- **Alpha v0.0.4_7:** approved integrated build featuring *The Gauntlet*, moving platforms, falling Gravity Platforms, and enemies. Includes the restored turbo trail and a cleaner in-game HUD.
 
 For details, see [CHANGELOG.md](CHANGELOG.md) and [GitHub Releases](https://github.com/hadryndev/7-seconds-to-do/releases).
 

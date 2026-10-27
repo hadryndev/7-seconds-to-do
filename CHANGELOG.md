@@ -2,29 +2,35 @@
 
 A record of major changes to the game, developed by **Hadryn**.
 
-> **Current approved playable version:** Alpha v0.0.4_6  
+> **Current approved playable version:** Alpha v0.0.4_7  
 > **Status:** Alpha development. The number after the underscore identifies an incremental build within the corresponding Alpha version.
 >
 > This document records confirmed project changes. Earlier intermediate builds without individual detailed records are grouped together; they were not necessarily public releases.
 
-## Alpha v0.0.4_7 — Moving Platforms Lab 01 (Unreleased)
+## Alpha v0.0.4_7 — The Gauntlet, Moving Platforms & Enemies
 
-**Status: experimental laboratory tested and approved; not yet integrated into the published game.**
+**Status: final integrated build approved after hands-on testing.**
 
-### Moving Platform Prototype
-- Tested horizontally and vertically moving platforms that carry the player.
-- Preserved the approved **16 × 16 px rectangular collision box** while rendering the character as a more cartoonish rounded square.
-- Kept existing movement and jump physics unchanged.
+### Stage 3 — The Gauntlet
+- Replaces the original camera laboratory with a **150-tile-wide** level that combines dynamic camera tracking with new obstacles.
+- Uses the level names **Zigzagging**, **Parkour**, and **The Gauntlet**. Gameplay text remains in Brazilian Portuguese until localization is implemented.
+- Includes horizontal platforms, vertical elevators, and **Gravity Platforms** that begin falling only after the player lands on them.
+- Includes patrol enemies: **blue enemies** can be defeated by jumping on their heads; **red enemies** are fatal on contact from any direction.
+- Retains the two-stage Presentation/Challenge structure. Completing Presentation returns the player to the **start of the level** for Challenge.
+- Preserves the strict seven-second timer, full mid-air movement, and the existing **16 × 16 px black square** player. No visual redesign is included.
 
-### Bugs Found and Fixed During Laboratory Testing
-- **Player teleportation on moving-platform underside collisions:** jumping into the underside of the vertical (purple) platform could unexpectedly snap the player to either horizontal edge, particularly while holding a direction or reversing direction mid-jump. **Fix:** separated horizontal side-entry checks from vertical floor/ceiling collision handling to prevent an underside hit from triggering sideways repositioning.
-- **Moving platforms resetting on player death/respawn:** platform motion restarted whenever the player respawned. **Fix:** separated player-only respawn from a full laboratory reset, allowing moving platforms to continue from their current positions and directions.
+### Laboratory Bugs Found and Fixed
+- **Unexpected sideways teleport on underside collisions:** jumping into a vertical moving platform could snap the player to its left or right edge. **Fix:** prevent underside collisions from being handled as horizontal side-entry collisions.
+- **Automatic moving platforms restarting after player respawn:** the laboratory initially reset the entire moving-platform cycle on death. **Fix:** keep the automatic platforms moving through player respawns; separately reset weight-triggered falling platforms for a new attempt.
+- **Overlapping platform paths:** early Gauntlet layouts allowed horizontal and vertical platforms to collide in ways that could displace the player. **Fix:** revise their trajectories to avoid unfair intersections.
+- **Enemy overlap with the exit:** the initial prototype allowed an enemy to pass behind the exit door. **Fix:** restrict enemy patrol bounds away from the exit.
+- **Challenge starting midway through the level:** an initial prototype spawned the player at a temporary test checkpoint after Presentation. **Fix:** reset player position to the level entrance at the beginning of Challenge.
 
-### Validation
-- The developer retested the previously reported reproduction cases, including jumping into the purple platform from below and changing direction, and reported no remaining glitches.
-- Respawning now leaves the moving platforms running continuously in the laboratory.
-
-> These corrections were verified in the **v0.0.4_7 laboratory prototype**, not in the currently published **Alpha v0.0.4_6**. They will become part of the public changelog when integrated and released.
+### Validation and Scope
+- All eight tests of the **standalone Gauntlet v3 laboratory** were approved by the developer.
+- The original Level 1 and Level 2 map data were preserved in the integrated candidate.
+- The developer approved the final integrated Stage 3 build. The turbo speed-trail effect was restored, and temporary in-game notifications were removed.
+- The approved mascot concept, **Keyla**, is reserved for the future **Alpha v0.1.0 — The Great Update**; no character visuals are changed in v0.0.4_7.
 
 ## Alpha v0.0.4_6 — Dynamic Camera and Expanded Levels
 
@@ -105,7 +111,7 @@ The following features belong to the **Game Design Document (GDD)** and **must n
 - Moving or collapsing platforms, traps, switches, teleporters, gravity changes, moving hazards, and dash.
 - Enemies and more advanced platforming encounters.
 - Puzzles involving hidden keys and previously learned mechanics.
-- A geometric protagonist with expressions and small animations.
+- Keyla, the approved living-padlock protagonist, with expressions and small animations (planned for Alpha v0.1.0).
 - Dynamic music and retro / 8-bit sound effects.
 - Progress saving, personal bests, medals or stars, and rankings.
 - Brazilian Portuguese, English, and Spanish interfaces for the intended launch.
