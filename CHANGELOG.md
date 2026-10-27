@@ -2,14 +2,14 @@
 
 A record of major changes to the game, developed by **Hadryn**.
 
-> **Current approved playable version:** Alpha v0.0.4_6  
+> **Current approved playable version:** Alpha v0.0.4_7  
 > **Status:** Alpha development. The number after the underscore identifies an incremental build within the corresponding Alpha version.
 >
 > This document records confirmed project changes. Earlier intermediate builds without individual detailed records are grouped together; they were not necessarily public releases.
 
-## Alpha v0.0.4_7 — The Gauntlet, Moving Platforms & Enemies (Release Candidate)
+## Alpha v0.0.4_7 — The Gauntlet, Moving Platforms & Enemies
 
-**Status: standalone laboratories approved; integration prepared on a separate branch. Final integrated-game testing and public release are still pending.**
+**Status: final integrated build approved after hands-on testing.**
 
 ### Stage 3 — The Gauntlet
 - Replaces the original camera laboratory with a **150-tile-wide** level that combines dynamic camera tracking with new obstacles.
@@ -29,7 +29,7 @@ A record of major changes to the game, developed by **Hadryn**.
 ### Validation and Scope
 - All eight tests of the **standalone Gauntlet v3 laboratory** were approved by the developer.
 - The original Level 1 and Level 2 map data were preserved in the integrated candidate.
-- The **integrated build has not yet been approved in its final form**, and the published build remains **Alpha v0.0.4_6**.
+- The developer approved the final integrated Stage 3 build. The turbo speed-trail effect was restored, and temporary in-game notifications were removed.
 - The approved mascot concept, **Keyla**, is reserved for the future **Alpha v0.1.0 — The Great Update**; no character visuals are changed in v0.0.4_7.
 
 ## Alpha v0.0.4_6 — Dynamic Camera and Expanded Levels
