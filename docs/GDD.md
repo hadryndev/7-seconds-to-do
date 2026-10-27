@@ -15,6 +15,14 @@
 
 > **Transparency note:** This document combines confirmed design decisions with future goals. **Planned does not mean implemented.** Updating the GDD does not modify the playable game.
 
+### Current integration candidate
+
+**Alpha v0.0.4_7** is prepared on a separate development branch, **not yet released**. Its intended Level 3, **The Gauntlet**, integrates moving platforms, falling Gravity Platforms, and enemy patrols. The two original levels have been renamed **Zigzagging** (previously *Zigue-Zagueando*) and **Parkour**, without changing their maps. Full integration testing is required before deployment.
+
+### Protagonist concept — Keyla
+
+**Keyla** has been approved as the game's future mascot and protagonist: a **living padlock** whose name plays on the word *key*. She collects the key that unlocks the exit door. Her name is **Keyla** in **Brazilian Portuguese, English, and Spanish**. The current black square placeholder and **16 × 16 px rectangular hitbox** remain unchanged in Alpha v0.0.4_7. Her character design, expressions, and animations are planned for **Alpha v0.1.0 — The Great Update**. This is a visual/identity plan, not a change to the current collision geometry.
+
 ## 1. Game Overview
 
 **7 Seconds to Do!** is an independent platform game combining **memorization, speed, learning, and varied challenges**. Players first explore and memorize a route; once they collect the red key, they have **exactly seven seconds** to reach the exit door.
@@ -109,9 +117,10 @@ Each world will have five levels. Concepts discussed so far:
 
 | Level | Name | Content |
 |---|---|---|
-| 1 | **Zigue-Zagueando** | Presentation + Challenge |
+| 1 | **Zigzagging** | Presentation + Challenge |
 | 2 | **Parkour** | Presentation + Challenge |
-| 3 (experimental) | **Camera Laboratory** | Presentation + Challenge; 120 tiles wide |
+| 3 (published in v0.0.4_6) | **Camera Laboratory** | Presentation + Challenge; 120 tiles wide; to be replaced by the unreleased Stage 3 below |
+| 3 (v0.0.4_7 candidate) | **The Gauntlet** | Presentation + Challenge; 150 tiles wide; horizontal/vertical platforms, Gravity Platforms, and enemies |
 
 The intended **30-level campaign** is still in planning. The experimental camera level is not necessarily a final campaign level. The number of current levels should not be treated as a percentage of total development completion.
 
@@ -161,7 +170,7 @@ The selected direction is **minimalist**, potentially with **modern geometric el
 
 ### 7.2 Protagonist — Planning
 
-The protagonist will remain a **square with personality**, gaining facial expressions and small animations in a future visual update. This **does not imply a narrative**: the project intentionally focuses on gameplay.
+The officially approved future protagonist is **Keyla**, a living padlock with personality, facial expressions, and small animations. The existing square placeholder remains until **Alpha v0.1.0 — The Great Update**. This **does not imply a narrative**: the project intentionally focuses on gameplay.
 
 Future worlds may have distinct visual identities while keeping obstacles and critical objects immediately recognizable.
 
@@ -252,4 +261,4 @@ The developer has cited **Celeste** and **Geometry Dash**, particularly for plat
 **Developed by Hadryn**  
 **7 Seconds to Do! — Memorize the path. You have 7 seconds!**
 
-*Planning document. Publishing this file does not modify the Alpha v0.0.4_6 playable build.*
+*Planning document. Updating this file and preparing the Alpha v0.0.4_7 branch does not modify the published Alpha v0.0.4_6 build.*
