@@ -1,0 +1,91 @@
+
+#include <switch.h>
+
+#define FB_WIDTH 1280
+#define FB_HEIGHT 720
+
+// Resolucao original do jogo: 640x320
+#define SCALE 2
+#define OFFSET_Y 40
+
+#define WHITE  RGBA8_MAXALPHA(255, 255, 255)
+#define BLACK  RGBA8_MAXALPHA(0, 0, 0)
+#define YELLOW RGBA8_MAXALPHA(245, 210, 30)
+
+// Desenha um retangulo usando coordenadas do jogo
+static void drawRect(u32* pixels, u32 stride,
+                     int x, int y, int w, int h, u32 color)
+{
+    int left = x * SCALE;
+    int top = y * SCALE + OFFSET_Y;
+    int right = (x + w) * SCALE;
+    int bottom = (y + h) * SCALE + OFFSET_Y;
+
+    for (int py = top; py < bottom; py++)
+    {
+        if (py < 0 || py >= FB_HEIGHT)
+            continue;
+
+        for (int px = left; px < right; px++)
+        {
+            if (px < 0 || px >= FB_WIDTH)
+                continue;
+
+            pixels[py * stride + px] = color;
+        }
+    }
+}
+
+int main(int argc, char* argv[])
+{
+    NWindow* window = nwindowGetDefault();
+
+    Framebuffer fb;
+    Result rc = framebufferCreate(
+        &fb, window, FB_WIDTH, FB_HEIGHT,
+        PIXEL_FORMAT_RGBA_8888, 2
+    );
+
+    if (R_FAILED(rc))
+        return 1;
+
+    framebufferMakeLinear(&fb);
+
+    padConfigureInput(1, HidNpadStyleSet_NpadStandard);
+
+    PadState pad;
+    padInitializeDefault(&pad);
+
+    while (appletMainLoop())
+    {
+        padUpdate(&pad);
+
+        if (padGetButtonsDown(&pad) & HidNpadButton_Plus)
+            break;
+
+        u32 strideBytes;
+        u32* pixels = (u32*)framebufferBegin(&fb, &strideBytes);
+
+        u32 stride = strideBytes / sizeof(u32);
+
+        // Fundo branco
+        for (int y = 0; y < FB_HEIGHT; y++)
+        {
+            for (int x = 0; x < FB_WIDTH; x++)
+            {
+                pixels[y * stride + x] = WHITE;
+            }
+        }
+
+        // Chao amarelo
+        drawRect(pixels, stride, 0, 288, 640, 32, YELLOW);
+
+        // Nosso protagonista: quadrado preto 16x16
+        drawRect(pixels, stride, 80, 272, 16, 16, BLACK);
+
+        framebufferEnd(&fb);
+    }
+
+    framebufferClose(&fb);
+    return 0;
+}
