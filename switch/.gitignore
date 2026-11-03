@@ -1,0 +1,8 @@
+build/
+*.elf
+*.nacp
+*.nro
+*.lst
+*.map
+.vscode/
+*.bak
